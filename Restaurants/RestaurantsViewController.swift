@@ -15,25 +15,34 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
         return table
     }()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
-    }
     
     private func setupUI() {
+        tableView.frame = view.bounds
         view.backgroundColor = .white
         navigationItem.title = "My Restaurants"
+        
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
+        
+        navigationItem.rightBarButtonItem = addButton
+    
+        
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
         view.addSubview(tableView)
+    }
+    
+    @objc private func addTapped() {
+        let addRestaurantVC = AddRestaurantViewController()
+        self.present(addRestaurantVC, animated: true, completion: nil)
     }
 }
 
@@ -67,5 +76,16 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
         aboutRestaurantViewController.restaurant = Restaurant.restaurants[indexPath.row]
 //        self.navigationController?.pushViewController(aboutRestaurantViewController, animated: false)
         self.present(aboutRestaurantViewController, animated: true, completion: nil)
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            Restaurant.restaurants.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .fade)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
     }
 }
