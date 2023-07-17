@@ -3,4 +3,69 @@
    uuid = "420B8C7D-64BF-4F8D-8DB0-11F6EF11864F"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "73C55201-31D7-4D59-8831-70FEA2FAAB1C"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Restaurants/RestaurantsViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "12"
+            endingLineNumber = "12"
+            landmarkName = "tableView"
+            landmarkType = "24">
+            <Locations>
+               <Location
+                  uuid = "73C55201-31D7-4D59-8831-70FEA2FAAB1C - 6e81998d07f54bf"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; __C.UITableView in variable initialization expression of Restaurants.RestaurantViewConrtoller.tableView : __C.UITableView"
+                  moduleName = "Restaurants"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nincha/Desktop/Swift_proj/Restaurants/Restaurants/RestaurantsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "13"
+                  endingLineNumber = "13"
+                  offsetFromSymbolStart = "28">
+               </Location>
+               <Location
+                  uuid = "73C55201-31D7-4D59-8831-70FEA2FAAB1C - 2f5c010220a771f0"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Restaurants.RestaurantViewConrtoller.init(nibName: Swift.Optional&lt;Swift.String&gt;, bundle: Swift.Optional&lt;__C.NSBundle&gt;) -&gt; Restaurants.RestaurantViewConrtoller"
+                  moduleName = "Restaurants"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nincha/Desktop/Swift_proj/Restaurants/Restaurants/RestaurantsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12"
+                  offsetFromSymbolStart = "100">
+               </Location>
+               <Location
+                  uuid = "73C55201-31D7-4D59-8831-70FEA2FAAB1C - da0aec34e1e8b936"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Restaurants.RestaurantViewConrtoller.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Restaurants.RestaurantViewConrtoller&gt;"
+                  moduleName = "Restaurants"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/nincha/Desktop/Swift_proj/Restaurants/Restaurants/RestaurantsViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "12"
+                  endingLineNumber = "12"
+                  offsetFromSymbolStart = "68">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

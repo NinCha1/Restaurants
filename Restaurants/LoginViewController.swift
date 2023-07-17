@@ -89,7 +89,8 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func loginButtonTapped() {
-        print("button tapped")
+        let restaurantViewController = RestaurantViewConrtoller()
+        self.navigationController?.pushViewController(restaurantViewController, animated: false)
     }
 }
 
