@@ -18,6 +18,8 @@
 		49E5DABE2A5C6AFC0077F062 /* AboutRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E5DABD2A5C6AFB0077F062 /* AboutRestaurantViewController.swift */; };
 		49E5DAC02A65E1C10077F062 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E5DABF2A65E1C10077F062 /* User.swift */; };
 		49E5DAC22A65F6790077F062 /* AddRestaurantViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E5DAC12A65F6790077F062 /* AddRestaurantViewController.swift */; };
+		49E5DAC42A682A590077F062 /* AuthenticationVM.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E5DAC32A682A590077F062 /* AuthenticationVM.swift */; };
+		49E5DACA2A6B19A30077F062 /* Dynamic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49E5DAC92A6B19A30077F062 /* Dynamic.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		49E5DABD2A5C6AFB0077F062 /* AboutRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutRestaurantViewController.swift; sourceTree = "<group>"; };
 		49E5DABF2A65E1C10077F062 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		49E5DAC12A65F6790077F062 /* AddRestaurantViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddRestaurantViewController.swift; sourceTree = "<group>"; };
+		49E5DAC32A682A590077F062 /* AuthenticationVM.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationVM.swift; sourceTree = "<group>"; };
+		49E5DAC92A6B19A30077F062 /* Dynamic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dynamic.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -110,19 +114,45 @@
 		4983ADC329BE22E100ACE597 /* Restaurants */ = {
 			isa = PBXGroup;
 			children = (
+				49E5DAC72A682B0B0077F062 /* ViewModels */,
+				49E5DAC62A682AE50077F062 /* Views */,
 				49325A7529D899A200708390 /* Models */,
 				4983ADC429BE22E100ACE597 /* AppDelegate.swift */,
-				49E5DABD2A5C6AFB0077F062 /* AboutRestaurantViewController.swift */,
 				4983ADC629BE22E100ACE597 /* SceneDelegate.swift */,
-				4983ADC829BE22E100ACE597 /* LoginViewController.swift */,
-				4983ADF429BE3DC000ACE597 /* RestaurantsViewController.swift */,
-				49325A7829D8A08300708390 /* RestaurantTableViewCell.swift */,
 				4983ADCD29BE22E300ACE597 /* Assets.xcassets */,
 				4983ADCF29BE22E300ACE597 /* LaunchScreen.storyboard */,
 				4983ADD229BE22E300ACE597 /* Info.plist */,
-				49E5DAC12A65F6790077F062 /* AddRestaurantViewController.swift */,
 			);
 			path = Restaurants;
+			sourceTree = "<group>";
+		};
+		49E5DAC62A682AE50077F062 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				49325A7829D8A08300708390 /* RestaurantTableViewCell.swift */,
+				4983ADF429BE3DC000ACE597 /* RestaurantsViewController.swift */,
+				49E5DABD2A5C6AFB0077F062 /* AboutRestaurantViewController.swift */,
+				4983ADC829BE22E100ACE597 /* LoginViewController.swift */,
+				49E5DAC12A65F6790077F062 /* AddRestaurantViewController.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		49E5DAC72A682B0B0077F062 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				49E5DAC82A6B19910077F062 /* Bindings */,
+				49E5DAC32A682A590077F062 /* AuthenticationVM.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		49E5DAC82A6B19910077F062 /* Bindings */ = {
+			isa = PBXGroup;
+			children = (
+				49E5DAC92A6B19A30077F062 /* Dynamic.swift */,
+			);
+			path = Bindings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -259,8 +289,10 @@
 				4983ADC929BE22E100ACE597 /* LoginViewController.swift in Sources */,
 				4983ADF529BE3DC000ACE597 /* RestaurantsViewController.swift in Sources */,
 				49E5DABE2A5C6AFC0077F062 /* AboutRestaurantViewController.swift in Sources */,
+				49E5DAC42A682A590077F062 /* AuthenticationVM.swift in Sources */,
 				49E5DAC02A65E1C10077F062 /* User.swift in Sources */,
 				49E5DAC22A65F6790077F062 /* AddRestaurantViewController.swift in Sources */,
+				49E5DACA2A6B19A30077F062 /* Dynamic.swift in Sources */,
 				4983ADC529BE22E100ACE597 /* AppDelegate.swift in Sources */,
 				49325A7929D8A08300708390 /* RestaurantTableViewCell.swift in Sources */,
 				4983ADC729BE22E100ACE597 /* SceneDelegate.swift in Sources */,

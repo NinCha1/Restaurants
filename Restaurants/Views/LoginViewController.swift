@@ -16,10 +16,12 @@ final class LoginViewController: UIViewController {
         static let belowLabel: CGFloat = 150
     }
     
+    var viewModel = AuthenticationVM()
+    
     private let loginLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-        label.text = "My Restaurants"
+//        label.text = "My Restaurants"
         label.font = UIFont(name:"HelveticaNeue-Bold", size: 35.0)
         return label
     }()
@@ -48,8 +50,17 @@ final class LoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        bindViewModel()
         
         setupUI()
+    }
+    
+    func bindViewModel() {
+        viewModel.statusText.bind({ (statusText) in
+            DispatchQueue.main.async {
+                self.loginLabel.text = statusText
+            }
+        })
     }
 
     private func setupUI() {
@@ -89,8 +100,9 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func loginButtonTapped() {
-        let restaurantViewController = RestaurantViewConrtoller()
-        self.navigationController?.pushViewController(restaurantViewController, animated: false)
+//        let restaurantViewController = RestaurantViewConrtoller()
+//        self.navigationController?.pushViewController(restaurantViewController, animated: false)
+        viewModel.userButtonPressed(login: (loginTextField.text ?? ""), password: (passwordTextField.text ?? ""))
     }
 }
 
