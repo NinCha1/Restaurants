@@ -30,8 +30,7 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
         
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
         
-        navigationItem.rightBarButtonItem = addButton
-    
+        navigationItem.rightBarButtonItem = addButton    
         
         navigationController?.navigationBar.prefersLargeTitles = true
         tableView.backgroundColor = .white

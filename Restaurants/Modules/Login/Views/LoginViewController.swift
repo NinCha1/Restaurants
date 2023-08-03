@@ -21,7 +21,7 @@ final class LoginViewController: UIViewController {
     private let loginLabel: UILabel = {
         let label = UILabel()
         label.textColor = .black
-//        label.text = "My Restaurants"
+        label.text = "My Restaurants"
         label.font = UIFont(name:"HelveticaNeue-Bold", size: 35.0)
         return label
     }()
@@ -56,9 +56,9 @@ final class LoginViewController: UIViewController {
     }
     
     func bindViewModel() {
-        viewModel.statusText.bind({ (statusText) in
+        viewModel.statusText.bind({ [weak self] (statusText) in
             DispatchQueue.main.async {
-                self.loginLabel.text = statusText
+                self?.loginLabel.text = statusText
             }
         })
     }
@@ -100,9 +100,12 @@ final class LoginViewController: UIViewController {
     }
     
     @objc private func loginButtonTapped() {
-//        let restaurantViewController = RestaurantViewConrtoller()
-//        self.navigationController?.pushViewController(restaurantViewController, animated: false)
         viewModel.userButtonPressed(login: (loginTextField.text ?? ""), password: (passwordTextField.text ?? ""))
+        
+        if loginLabel.text ==  "You sucessfully logged in." { // cringe
+            let restaurantViewController = RestaurantViewConrtoller()
+            self.navigationController?.pushViewController(restaurantViewController, animated: false)
+        }
     }
 }
 

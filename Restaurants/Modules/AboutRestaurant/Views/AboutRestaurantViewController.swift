@@ -72,7 +72,7 @@ final class AboutRestaurantViewController: UIViewController {
         super.viewDidLoad()
         
         if let restaurant = restaurant {
-            restaurantImage.image = restaurant.picture
+            restaurantImage.image = UIImage(named: restaurant.picture)
             restaurantName.text = restaurant.name
             restaurantAddress.text = restaurant.address
             restaurantType.text = restaurant.type

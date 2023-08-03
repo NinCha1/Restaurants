@@ -75,7 +75,6 @@ final class RestaurantTableViewCell: UITableViewCell {
         }
         
         NSLayoutConstraint.activate([
-            
             contentView.heightAnchor.constraint(equalToConstant: 100),
             
             restaurantImage.heightAnchor.constraint(equalTo: contentView.heightAnchor, constant: -10),
@@ -91,7 +90,7 @@ final class RestaurantTableViewCell: UITableViewCell {
     }
     
     func update(with restaurant: Restaurant) {
-        restaurantImage.image = restaurant.picture
+        restaurantImage.image = UIImage(named: restaurant.picture)
         restaurantType.text = restaurant.type
         restaurantName.text = restaurant.name
         restaurantAddress.text = restaurant.address
