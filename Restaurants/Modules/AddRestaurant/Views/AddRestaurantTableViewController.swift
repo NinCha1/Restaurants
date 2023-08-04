@@ -12,15 +12,21 @@ final class AddRestaurantViewController: UIViewController {
     
     private let saveButton = UIButton()
     
+    var delegate: isAbleToReceiveData!
+    
     var nameLabel = makeHeaderLabel(text: "Name")
     var typeLabel = makeHeaderLabel(text: "Type")
     var addressLabel = makeHeaderLabel(text: "Address")
     var descriptionLabel = makeHeaderLabel(text: "Descripton")
     
+    lazy var picture = ""
+    
     private let nameTextField = makeTextField(placeholder: "Name")
     private let typeTextField = makeTextField(placeholder: "Type")
     private let addressTextField = makeTextField(placeholder: "Address")
     private let descriptionTextField =  makeTextField(placeholder: "Descripton")
+    
+   lazy var restaurant = RestaurantDTO(name: nameTextField.text ?? "", picture: picture, description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? "")
     
     private let errorLabel: UILabel = {
         let label = UILabel()
@@ -109,13 +115,21 @@ final class AddRestaurantViewController: UIViewController {
     
     
     @objc private func saveTapped() {
-//        if areTextFieldsValid() {
-//            Restaurant.restaurants.append(Restaurant(name: nameTextField.text ?? "", picture: imageAdd.image!, description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? ""))
-//            print(Restaurant.restaurants)
-//        } else {
-//            errorLabel.text = "Anlaki"
-//        }
+        if areTextFieldsValid() {
+            print("saved")
+//            RestaurantDTO.savedRestaurants.append(RestaurantDTO(name: nameTextField.text ?? "", picture: "restaurant1", description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? ""))
+            self.dismiss(animated: true, completion: nil)
+        } else {
+            errorLabel.text = "Anlaki"
+        }
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        delegate.pass(restaurant: restaurant)
+    }
+    
     
     private func setupTextFields() {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
@@ -165,7 +179,11 @@ extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavig
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let fileUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL else { return }
+        picture = fileUrl.absoluteString
+        print(picture)
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        
         imageAdd.image = image
         self.dismiss(animated: true, completion: nil)
     }

@@ -10,7 +10,7 @@ import MapKit
 
 final class AboutRestaurantViewController: UIViewController {
 
-    var restaurant: Restaurant?
+    var restaurant: RestaurantDTO?
     
     
     private let restaurantImage: UIImageView = {

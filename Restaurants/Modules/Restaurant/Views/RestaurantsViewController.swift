@@ -7,7 +7,17 @@
 
 import UIKit
 
-final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
+protocol isAbleToReceiveData {
+    func pass(restaurant: RestaurantDTO)
+}
+
+final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate, isAbleToReceiveData {
+    
+    var restaurants: [RestaurantDTO] = [] {
+        didSet {
+            RestaurantDTO.saveToFile(restaurants: restaurants)
+        }
+    }
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -15,13 +25,31 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
         return table
     }()
     
+    func pass(restaurant: RestaurantDTO) {
+        let newIndexPath = IndexPath(row: restaurants.count, section: 0)
+        restaurants.append(restaurant)
+        tableView.insertRows(at: [newIndexPath], with: .automatic)
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if let savedRestaurants = RestaurantDTO.loadFromFile() {
+            restaurants = savedRestaurants
+        }
+//        } else {
+//            restaurants = RestaurantDTO.savedRestaurants
+//        }
+        
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        tableView.reloadData()
+    }
     
     private func setupUI() {
         tableView.frame = view.bounds
@@ -41,6 +69,7 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
     
     @objc private func addTapped() {
         let addRestaurantVC = AddRestaurantViewController()
+        addRestaurantVC.delegate = self
         self.present(addRestaurantVC, animated: true, completion: nil)
     }
 }
@@ -48,7 +77,7 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
 extension RestaurantViewConrtoller: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return Restaurant.restaurants.count
+            return restaurants.count
         } else {
             return 0
         }
@@ -59,7 +88,7 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
             fatalError("Table did not dequeue a Cell")
         }
         
-        let restaurant = Restaurant.restaurants[indexPath.row]
+        let restaurant = restaurants[indexPath.row]
         
         cell.update(with: restaurant)
         cell.showsReorderControl = true
@@ -72,14 +101,14 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
         
         let aboutRestaurantViewController = AboutRestaurantViewController()
     
-        aboutRestaurantViewController.restaurant = Restaurant.restaurants[indexPath.row]
+        aboutRestaurantViewController.restaurant = restaurants[indexPath.row]
 //        self.navigationController?.pushViewController(aboutRestaurantViewController, animated: false)
         self.present(aboutRestaurantViewController, animated: true, completion: nil)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            Restaurant.restaurants.remove(at: indexPath.row)
+            restaurants.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }

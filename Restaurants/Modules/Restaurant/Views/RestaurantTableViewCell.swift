@@ -58,7 +58,7 @@ final class RestaurantTableViewCell: UITableViewCell {
         setupUI()
     }
      
-    @available(*,unavailable) //pohui nahui
+    @available(*,unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -89,8 +89,12 @@ final class RestaurantTableViewCell: UITableViewCell {
 
     }
     
-    func update(with restaurant: Restaurant) {
-        restaurantImage.image = UIImage(named: restaurant.picture)
+    func update(with restaurant: RestaurantDTO) {
+//        let url = URL(string: restaurant.picture)
+        print(restaurant.picture)
+//        let data = try? Data(contentsOf: url!)
+//        restaurantImage.image = UIImage(data: data!)
+        
         restaurantType.text = restaurant.type
         restaurantName.text = restaurant.name
         restaurantAddress.text = restaurant.address
