@@ -91,6 +91,7 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
         let restaurant = restaurants[indexPath.row]
         
         cell.update(with: restaurant)
+        print(restaurant)
         cell.showsReorderControl = true
         
         return cell

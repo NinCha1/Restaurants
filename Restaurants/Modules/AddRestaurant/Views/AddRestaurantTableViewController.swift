@@ -170,6 +170,38 @@ final class AddRestaurantViewController: UIViewController {
         return textField
     }
     
+    private func saveImage(image: UIImage) {
+
+
+     guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
+
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+        let result = formatter.string(from: date)
+        
+        let fileURL = documentsDirectory.appendingPathComponent(result)
+        guard let data = image.jpegData(compressionQuality: 1) else { return }
+
+        //Checks if file exists, removes it if so.
+        if FileManager.default.fileExists(atPath: fileURL.path) {
+            do {
+                try FileManager.default.removeItem(atPath: fileURL.path)
+                print("Removed old image")
+            } catch let removeError {
+                print("couldn't remove file at path", removeError)
+            }
+
+        }
+
+        do {
+            try data.write(to: fileURL)
+        } catch let error {
+            print("error saving file with error", error)
+        }
+
+    }
+
 }
 
 extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -180,11 +212,11 @@ extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavig
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         guard let fileUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL else { return }
-        picture = fileUrl.absoluteString
-        print(picture)
-        let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
+        picture = fileUrl.path
         
+        let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         imageAdd.image = image
+        
         self.dismiss(animated: true, completion: nil)
     }
     
