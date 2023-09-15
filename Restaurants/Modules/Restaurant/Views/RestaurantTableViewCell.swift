@@ -106,7 +106,7 @@ final class RestaurantTableViewCell: UITableViewCell {
         return nil
     }
     
-    func update(with restaurant: RestaurantDTO) {
+    func update(with restaurant: Restaurant) {
         
         restaurantType.text = restaurant.type
         restaurantName.text = restaurant.name

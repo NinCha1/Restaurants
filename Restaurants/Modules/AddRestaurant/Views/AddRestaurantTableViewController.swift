@@ -7,12 +7,16 @@
 
 import UIKit
 
+protocol AddRestaurantDelegate: AnyObject {
+    func didAddRestaurant(restaurant: Restaurant)
+}
+
 
 final class AddRestaurantViewController: UIViewController {
     
     private let saveButton = UIButton()
     
-    var delegate: isAbleToReceiveData!
+    weak var delegate: AddRestaurantDelegate?
     
     var nameLabel = makeHeaderLabel(text: "Name")
     var typeLabel = makeHeaderLabel(text: "Type")
@@ -26,7 +30,7 @@ final class AddRestaurantViewController: UIViewController {
     private let addressTextField = makeTextField(placeholder: "Address")
     private let descriptionTextField =  makeTextField(placeholder: "Descripton")
     
-   lazy var restaurant = RestaurantDTO(name: nameTextField.text ?? "", picture: picture, description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? "")
+   lazy var restaurant = Restaurant(name: nameTextField.text ?? "", picture: picture, description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? "")
     
     private let errorLabel: UILabel = {
         let label = UILabel()
@@ -127,7 +131,7 @@ final class AddRestaurantViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
-        delegate.pass(restaurant: restaurant)
+        delegate?.didAddRestaurant(restaurant: restaurant)
     }
     
     
