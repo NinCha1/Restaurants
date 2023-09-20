@@ -14,6 +14,8 @@ protocol AddRestaurantDelegate: AnyObject {
 
 final class AddRestaurantViewController: UIViewController {
     
+    private let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+    
     private let saveButton = UIButton()
     
     weak var delegate: AddRestaurantDelegate?
@@ -174,38 +176,39 @@ final class AddRestaurantViewController: UIViewController {
         return textField
     }
     
-    private func saveImage(image: UIImage) {
-
-
-     guard let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else { return }
-
-        let date = Date()
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-        let result = formatter.string(from: date)
+    //MARK: Saving Image Logic
+    
+    private func saveImageToDocumentDirectory(_ image: UIImage) -> String? {
+        let timestamp = Date().timeIntervalSince1970
+        let fileName = "\(timestamp).png"
         
-        let fileURL = documentsDirectory.appendingPathComponent(result)
-        guard let data = image.jpegData(compressionQuality: 1) else { return }
-
-        //Checks if file exists, removes it if so.
-        if FileManager.default.fileExists(atPath: fileURL.path) {
+        if let data = image.pngData() {
+            let fileURL = documentsDirectory.appendingPathComponent(fileName)
             do {
-                try FileManager.default.removeItem(atPath: fileURL.path)
-                print("Removed old image")
-            } catch let removeError {
-                print("couldn't remove file at path", removeError)
+                try data.write(to: fileURL)
+                return fileName
+            } catch {
+                print("Error saving image: \(error)")
+                return nil
             }
-
         }
-
-        do {
-            try data.write(to: fileURL)
-        } catch let error {
-            print("error saving file with error", error)
-        }
-
+        
+        return nil
     }
-
+    
+//    private func saveImagePathToUserDefaults(_ relativePath: String, withKey key: String) {
+//        UserDefaults.standard.set(relativePath, forKey: key)
+//        UserDefaults.standard.synchronize()
+//    }
+//
+//    private func getImagePathToUserDefaults(forKey key: String) -> String? {
+//        return UserDefaults.standard.string(forKey: key)
+//    }
+//
+//    private func loadImageFromPath(_ relativePath: String) -> UIImage? {
+//        let fileURL = documentsDirectory.appendingPathComponent(relativePath)
+//        return UIImage(contentsOfFile: fileURL.path)
+//    }
 }
 
 extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -215,13 +218,15 @@ extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavig
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let fileUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL else { return }
-        picture = fileUrl.path
-        
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
         imageAdd.image = image
         
+        if let image = image {
+            if let path = saveImageToDocumentDirectory(image) {
+                picture = path
+            }
+        }
+        
         self.dismiss(animated: true, completion: nil)
     }
-    
 }

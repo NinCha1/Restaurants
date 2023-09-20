@@ -67,12 +67,29 @@ final class AboutRestaurantViewController: UIViewController {
 //        mapView.centerToLocation(<#T##CLLocation#>)
 //    }()
     
+    private func loadImageFromDiskWith(fileName: String) -> UIImage? {
+
+      let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+
+        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+
+        if let dirPath = paths.first {
+            let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
+            let image = UIImage(contentsOfFile: imageUrl.path)
+            return image
+
+        }
+
+        return nil
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let restaurant = restaurant {
-            restaurantImage.image = UIImage(named: restaurant.picture)
+            restaurantImage.image = loadImageFromDiskWith(fileName: restaurant.picture)
             restaurantName.text = restaurant.name
             restaurantAddress.text = restaurant.address
             restaurantType.text = restaurant.type

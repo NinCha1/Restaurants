@@ -50,5 +50,6 @@ final class RestaurantViewModel {
     
     func deleteRestaurant(_ index: Int) {
         restaurants.remove(at: index)
+        saveRestaurants()
     }
 }
