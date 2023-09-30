@@ -16,7 +16,7 @@ final class AddRestaurantViewController: UIViewController {
     
     private let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
-    private let saveButton = UIButton()
+    private let saveButton = CustomButton()
     
     weak var delegate: AddRestaurantDelegate?
     
@@ -32,12 +32,10 @@ final class AddRestaurantViewController: UIViewController {
     private let addressTextField = makeTextField(placeholder: "Address")
     private let descriptionTextField =  makeTextField(placeholder: "Descripton")
     
-   lazy var restaurant = Restaurant(name: nameTextField.text ?? "", picture: picture, description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? "")
-    
     private let errorLabel: UILabel = {
         let label = UILabel()
         label.textColor = .red
-        label.font = Font.headerFont
+        label.font = UIFont(name:"HelveticaNeue", size: 17.0)
         return label
     }()
     
@@ -80,7 +78,7 @@ final class AddRestaurantViewController: UIViewController {
         let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
         imageAdd.addGestureRecognizer(tapGestureRecogniser)
         
-        
+        saveButton.isEnabled = false
         saveButton.backgroundColor = .black
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
@@ -122,18 +120,13 @@ final class AddRestaurantViewController: UIViewController {
     
     @objc private func saveTapped() {
         if areTextFieldsValid() {
-            print("saved")
-//            RestaurantDTO.savedRestaurants.append(RestaurantDTO(name: nameTextField.text ?? "", picture: "restaurant1", description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? ""))
+            let restaurant = Restaurant(name: nameTextField.text!, picture: picture, description: descriptionTextField.text!, type: typeTextField.text!, address: addressTextField.text!)
+            delegate?.didAddRestaurant(restaurant: restaurant)
+            
             self.dismiss(animated: true, completion: nil)
         } else {
-            errorLabel.text = "Anlaki"
+            errorLabel.text = "Please fill out everything."
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        delegate?.didAddRestaurant(restaurant: restaurant)
     }
     
     
@@ -154,8 +147,10 @@ final class AddRestaurantViewController: UIViewController {
     @objc private func textFieldDidChange() {
         if areTextFieldsValid() {
             errorLabel.text = ""
+            saveButton.isEnabled = true
         } else {
-            errorLabel.text = "Anlaki"
+            errorLabel.text = "Please fill out everything."
+            saveButton.isEnabled = false
         }
     }
     private static func makeHeaderLabel(text: String) -> UILabel {
@@ -168,11 +163,13 @@ final class AddRestaurantViewController: UIViewController {
     }
     
     private static func makeTextField(placeholder: String) -> UITextField {
-        let textField = UITextField()
-        textField.placeholder = placeholder
+        let textField = UITextFieldPadding()
+//        textField.placeholder = placeholder
         textField.layer.borderColor = UIColor.gray.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 5.0
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
         return textField
     }
     
@@ -195,20 +192,6 @@ final class AddRestaurantViewController: UIViewController {
         
         return nil
     }
-    
-//    private func saveImagePathToUserDefaults(_ relativePath: String, withKey key: String) {
-//        UserDefaults.standard.set(relativePath, forKey: key)
-//        UserDefaults.standard.synchronize()
-//    }
-//
-//    private func getImagePathToUserDefaults(forKey key: String) -> String? {
-//        return UserDefaults.standard.string(forKey: key)
-//    }
-//
-//    private func loadImageFromPath(_ relativePath: String) -> UIImage? {
-//        let fileURL = documentsDirectory.appendingPathComponent(relativePath)
-//        return UIImage(contentsOfFile: fileURL.path)
-//    }
 }
 
 extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavigationControllerDelegate {

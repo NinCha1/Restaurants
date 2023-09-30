@@ -10,6 +10,8 @@
 		49325A7729D899C300708390 /* Restaurant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49325A7629D899C300708390 /* Restaurant.swift */; };
 		49325A7929D8A08300708390 /* RestaurantTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49325A7829D8A08300708390 /* RestaurantTableViewCell.swift */; };
 		497915FC2AB39E6E00CA7523 /* RestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497915FB2AB39E6E00CA7523 /* RestaurantViewModel.swift */; };
+		497915FE2ABC3DC900CA7523 /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497915FD2ABC3DC900CA7523 /* UITextFieldPadding.swift */; };
+		497916002AC2CFF700CA7523 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497915FF2AC2CFF700CA7523 /* CustomButton.swift */; };
 		4983ADC529BE22E100ACE597 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983ADC429BE22E100ACE597 /* AppDelegate.swift */; };
 		4983ADC729BE22E100ACE597 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983ADC629BE22E100ACE597 /* SceneDelegate.swift */; };
 		4983ADC929BE22E100ACE597 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983ADC829BE22E100ACE597 /* LoginViewController.swift */; };
@@ -48,6 +50,8 @@
 		49325A7629D899C300708390 /* Restaurant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Restaurant.swift; sourceTree = "<group>"; };
 		49325A7829D8A08300708390 /* RestaurantTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantTableViewCell.swift; sourceTree = "<group>"; };
 		497915FB2AB39E6E00CA7523 /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
+		497915FD2ABC3DC900CA7523 /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
+		497915FF2AC2CFF700CA7523 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		4983ADC129BE22E100ACE597 /* Restaurants.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Restaurants.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4983ADC429BE22E100ACE597 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4983ADC629BE22E100ACE597 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -294,6 +298,8 @@
 				49E5DADE2A746E580077F062 /* Typography.swift */,
 				49E5DAE02A7478C20077F062 /* ScreenDimension.swift */,
 				49E5DAE22A76A2DA0077F062 /* MyFileManager.swift */,
+				497915FD2ABC3DC900CA7523 /* UITextFieldPadding.swift */,
+				497915FF2AC2CFF700CA7523 /* CustomButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -438,6 +444,7 @@
 			files = (
 				49325A7729D899C300708390 /* Restaurant.swift in Sources */,
 				4983ADC929BE22E100ACE597 /* LoginViewController.swift in Sources */,
+				497916002AC2CFF700CA7523 /* CustomButton.swift in Sources */,
 				4983ADF529BE3DC000ACE597 /* RestaurantsViewController.swift in Sources */,
 				49E5DAE32A76A2DA0077F062 /* MyFileManager.swift in Sources */,
 				49E5DABE2A5C6AFC0077F062 /* AboutRestaurantViewController.swift in Sources */,
@@ -446,6 +453,7 @@
 				49E5DAC02A65E1C10077F062 /* User.swift in Sources */,
 				49E5DAC22A65F6790077F062 /* AddRestaurantTableViewController.swift in Sources */,
 				497915FC2AB39E6E00CA7523 /* RestaurantViewModel.swift in Sources */,
+				497915FE2ABC3DC900CA7523 /* UITextFieldPadding.swift in Sources */,
 				49E5DACA2A6B19A30077F062 /* Dynamic.swift in Sources */,
 				4983ADC529BE22E100ACE597 /* AppDelegate.swift in Sources */,
 				49325A7929D8A08300708390 /* RestaurantTableViewCell.swift in Sources */,

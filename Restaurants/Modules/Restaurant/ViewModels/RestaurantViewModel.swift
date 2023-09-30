@@ -15,7 +15,6 @@ final class RestaurantViewModel {
     func loadRestaurants() {
         do {
             let data = try fileManager.read(fileNamed: "restaurants")
-//            let restaurantDTOs = RestaurantDTO.decode(data)
             let restaurantDTOs = try JSONDecoder().decode([RestaurantDTO].self, from: data)
             restaurants = restaurantDTOs.map { Restaurant(from: $0) }
         }

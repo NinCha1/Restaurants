@@ -11,10 +11,10 @@ class AuthenticationVM {
     var statusText = Dynamic("")
     
     func userButtonPressed(login: String, password: String) {
-        if login != User.logins[0].login || password != User.logins[0].password {
-            statusText.value = "Log in failed"
+        if User.logins.contains(where: { $0.login == login && $0.password == password }) {
+            statusText.value = "Success"
         } else {
-            statusText.value = "You sucessfully logged in."
+            statusText.value = "Log in failed. Try again"
         }
     }
 }

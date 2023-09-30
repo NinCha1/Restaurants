@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol isAbleToReceiveData {
-    func pass(restaurant: Restaurant)
-}
-
 final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
     
     private let viewModel = RestaurantViewModel()
@@ -28,16 +24,11 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
         setupUI()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        tableView.reloadData()
-    }
-    
     private func setupUI() {
         tableView.frame = view.bounds
         view.backgroundColor = .white
         navigationItem.title = "My Restaurants"
+        navigationItem.setHidesBackButton(true, animated: true)
         
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
         
@@ -78,7 +69,6 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
         let restaurant = viewModel.restaurantAtIndex(indexPath.row)
         
         cell.update(with: restaurant)
-        print(restaurant)
         cell.showsReorderControl = true
         
         return cell
@@ -90,7 +80,7 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
         let aboutRestaurantViewController = AboutRestaurantViewController()
     
         aboutRestaurantViewController.restaurant = viewModel.restaurantAtIndex(indexPath.row)
-//        self.navigationController?.pushViewController(aboutRestaurantViewController, animated: false)
+
         self.present(aboutRestaurantViewController, animated: true, completion: nil)
     }
     

@@ -78,7 +78,6 @@ final class AboutRestaurantViewController: UIViewController {
             let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
             let image = UIImage(contentsOfFile: imageUrl.path)
             return image
-
         }
 
         return nil
@@ -94,7 +93,6 @@ final class AboutRestaurantViewController: UIViewController {
             restaurantAddress.text = restaurant.address
             restaurantType.text = restaurant.type
             restaurantDescription.text = restaurant.description
-            
         }
         
         setupUI()

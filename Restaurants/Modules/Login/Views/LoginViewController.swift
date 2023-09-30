@@ -26,52 +26,72 @@ final class LoginViewController: UIViewController {
         return label
     }()
     
+    private let statusLabel : UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.font = UIFont(name:"HelveticaNeue", size: 17.0)
+        return label
+    }()
+    
     private let loginTextField: UITextField = {
-        let textField = UITextField()
+        let textField = UITextFieldPadding()
         textField.textColor = .gray
         textField.placeholder = "Username"
         textField.layer.borderColor = UIColor.gray.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 15.0
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         return textField
     }()
     
     private let passwordTextField: UITextField = {
-        let textField = UITextField()
+        let textField = UITextFieldPadding()
         textField.textColor = .gray
         textField.placeholder = "Password"
         textField.layer.borderColor = UIColor.gray.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 15.0
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
+        textField.isSecureTextEntry = true
         return textField
     }()
     
-    private let loginButton = UIButton()
+    private let loginButton = CustomButton()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         bindViewModel()
         
         setupUI()
+        setupTextFields()
     }
     
     func bindViewModel() {
         viewModel.statusText.bind({ [weak self] (statusText) in
             DispatchQueue.main.async {
-                self?.loginLabel.text = statusText
+                if statusText == "Success" {
+                    let restaurantViewController = RestaurantViewConrtoller()
+                    self?.navigationController?.pushViewController(restaurantViewController, animated: false)
+                } else {
+                    self?.statusLabel.text = statusText
+                }
             }
         })
     }
 
     private func setupUI() {
         view.backgroundColor = .white
+        
         loginButton.backgroundColor = .black
         loginButton.setTitle("Log In", for: .normal)
         loginButton.setTitleColor(.white, for: .normal)
         loginButton.layer.cornerRadius = 15.0
+        loginButton.isEnabled = false
         
         
-        [loginButton, loginLabel, loginTextField, passwordTextField].forEach {
+        [loginButton, loginLabel, statusLabel, loginTextField, passwordTextField].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -93,19 +113,31 @@ final class LoginViewController: UIViewController {
             passwordTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: Constant.defaultInset),
             passwordTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -Constant.defaultInset),
             passwordTextField.heightAnchor.constraint(equalToConstant: Constant.defaultHieght),
-            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: Constant.textFieldConst)
+            passwordTextField.topAnchor.constraint(equalTo: loginTextField.bottomAnchor, constant: Constant.textFieldConst),
+            
+            statusLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            statusLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 10),
         ])
         
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
     }
     
     @objc private func loginButtonTapped() {
-        viewModel.userButtonPressed(login: (loginTextField.text ?? ""), password: (passwordTextField.text ?? ""))
-        
-        if loginLabel.text ==  "You sucessfully logged in." { // cringe
-            let restaurantViewController = RestaurantViewConrtoller()
-            self.navigationController?.pushViewController(restaurantViewController, animated: false)
+        if let login = loginTextField.text, let password = passwordTextField.text {
+            viewModel.userButtonPressed(login: login, password: password)
         }
+    }
+    
+    @objc private func textFieldDidChange() {
+        let isLoginFieldFilled = !(loginTextField.text?.isEmpty ?? true)
+        let isPasswordFieldFilled = !(passwordTextField.text?.isEmpty ?? true)
+        
+        loginButton.isEnabled = isLoginFieldFilled && isPasswordFieldFilled
+    }
+    
+    private func setupTextFields() {
+        loginTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        passwordTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
 }
 
