@@ -11,10 +11,15 @@ class AuthenticationVM {
     var statusText = Dynamic("")
     
     func userButtonPressed(login: String, password: String) {
-        if User.logins.contains(where: { $0.login == login && $0.password == password }) {
-            statusText.value = "Success"
-        } else {
-            statusText.value = "Log in failed. Try again"
+        NetworkingManager.shared.login(email: login, password: password) { [self] result in
+            switch result {
+            case .success(let token):
+                print("Login successful. Token: \(token)")
+                statusText.value = "Success"
+            case .failure(let error):
+                print("Login failed with error: \(error)")
+                statusText.value = "Log In failed. Try again."
+            }
         }
     }
 }

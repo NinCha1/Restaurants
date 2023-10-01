@@ -12,6 +12,7 @@
 		497915FC2AB39E6E00CA7523 /* RestaurantViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497915FB2AB39E6E00CA7523 /* RestaurantViewModel.swift */; };
 		497915FE2ABC3DC900CA7523 /* UITextFieldPadding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497915FD2ABC3DC900CA7523 /* UITextFieldPadding.swift */; };
 		497916002AC2CFF700CA7523 /* CustomButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497915FF2AC2CFF700CA7523 /* CustomButton.swift */; };
+		497916062AC9742200CA7523 /* NetworkingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 497916052AC9742200CA7523 /* NetworkingManager.swift */; };
 		4983ADC529BE22E100ACE597 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983ADC429BE22E100ACE597 /* AppDelegate.swift */; };
 		4983ADC729BE22E100ACE597 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983ADC629BE22E100ACE597 /* SceneDelegate.swift */; };
 		4983ADC929BE22E100ACE597 /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4983ADC829BE22E100ACE597 /* LoginViewController.swift */; };
@@ -52,6 +53,7 @@
 		497915FB2AB39E6E00CA7523 /* RestaurantViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RestaurantViewModel.swift; sourceTree = "<group>"; };
 		497915FD2ABC3DC900CA7523 /* UITextFieldPadding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldPadding.swift; sourceTree = "<group>"; };
 		497915FF2AC2CFF700CA7523 /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
+		497916052AC9742200CA7523 /* NetworkingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingManager.swift; sourceTree = "<group>"; };
 		4983ADC129BE22E100ACE597 /* Restaurants.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Restaurants.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4983ADC429BE22E100ACE597 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4983ADC629BE22E100ACE597 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -98,6 +100,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		497916012AC970BF00CA7523 /* Nerworking */ = {
+			isa = PBXGroup;
+			children = (
+				497916052AC9742200CA7523 /* NetworkingManager.swift */,
+			);
+			path = Nerworking;
+			sourceTree = "<group>";
+		};
 		4983ADB829BE22E100ACE597 = {
 			isa = PBXGroup;
 			children = (
@@ -283,6 +293,7 @@
 		49E5DADC2A7463FB0077F062 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
+				497916012AC970BF00CA7523 /* Nerworking */,
 				49E5DADD2A746DEB0077F062 /* Components */,
 				49E5DACD2A745F3A0077F062 /* Login */,
 				49E5DAC62A682AE50077F062 /* AboutRestaurant */,
@@ -452,6 +463,7 @@
 				49E5DAE12A7478C20077F062 /* ScreenDimension.swift in Sources */,
 				49E5DAC02A65E1C10077F062 /* User.swift in Sources */,
 				49E5DAC22A65F6790077F062 /* AddRestaurantTableViewController.swift in Sources */,
+				497916062AC9742200CA7523 /* NetworkingManager.swift in Sources */,
 				497915FC2AB39E6E00CA7523 /* RestaurantViewModel.swift in Sources */,
 				497915FE2ABC3DC900CA7523 /* UITextFieldPadding.swift in Sources */,
 				49E5DACA2A6B19A30077F062 /* Dynamic.swift in Sources */,
