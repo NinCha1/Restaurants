@@ -44,7 +44,7 @@ final class NetworkingManager {
             }
             
             do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                let json = try JSONSerialization.jsonObject(with: data) as? [String: Any]
                 if let token = json?["token"] as? String {
                     completion(.success(token))
                 } else {

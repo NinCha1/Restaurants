@@ -24,6 +24,12 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
         setupUI()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.isNavigationBarHidden = false
+    }
+    
     private func setupUI() {
         tableView.frame = view.bounds
         view.backgroundColor = .white
@@ -47,7 +53,8 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
     @objc private func addTapped() {
         let addRestaurantVC = AddRestaurantViewController()
         addRestaurantVC.delegate = self
-        self.present(addRestaurantVC, animated: true, completion: nil)
+//        self.present(addRestaurantVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(addRestaurantVC, animated: true)
         
     }
 }
@@ -81,7 +88,8 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
     
         aboutRestaurantViewController.restaurant = viewModel.restaurantAtIndex(indexPath.row)
 
-        self.present(aboutRestaurantViewController, animated: true, completion: nil)
+//        self.present(aboutRestaurantViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(aboutRestaurantViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {

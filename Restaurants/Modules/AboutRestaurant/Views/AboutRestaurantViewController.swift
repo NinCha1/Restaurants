@@ -8,7 +8,7 @@
 import UIKit
 import MapKit
 
-final class AboutRestaurantViewController: UIViewController {
+final class AboutRestaurantViewController: UIViewController, UIScrollViewDelegate {
 
     var restaurant: Restaurant?
     
@@ -62,10 +62,12 @@ final class AboutRestaurantViewController: UIViewController {
         return label
     }()
     
+    private let cancelButton = UIButton()
     
-//    private let mapView : MKMapView = {
-//        mapView.centerToLocation(<#T##CLLocation#>)
-//    }()
+    private let scrollView = UIScrollView()
+    
+    private let contentView = UIView()
+    
     
     private func loadImageFromDiskWith(fileName: String) -> UIImage? {
 
@@ -86,6 +88,7 @@ final class AboutRestaurantViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
         
         if let restaurant = restaurant {
             restaurantImage.image = loadImageFromDiskWith(fileName: restaurant.picture)
@@ -96,48 +99,71 @@ final class AboutRestaurantViewController: UIViewController {
         }
         
         setupUI()
-        // Do any additional setup after loading the view.
     }
-    
     
     func setupUI() {
         view.backgroundColor = .white
+        scrollView.delegate = self
         
-        [restaurantImage, restaurantName, restaurantAddress, restaurantAddress, restaurantDescription, addressLabel].forEach {
-            view.addSubview($0)
+        self.view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        let hConst = contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        hConst.isActive = true
+        hConst.priority = UILayoutPriority(50)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            
+            contentView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        
+        cancelButton.backgroundColor = .gray
+        cancelButton.setTitle("X", for: .normal)
+        cancelButton.setTitleColor(.white, for: .normal)
+        cancelButton.layer.cornerRadius = 18.0
+        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
+        
+        [restaurantImage, cancelButton, restaurantName, restaurantAddress, restaurantAddress, restaurantDescription, addressLabel].forEach {
+            contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
-        
+                                    
         NSLayoutConstraint.activate([
-            restaurantImage.heightAnchor.constraint(equalTo: view.heightAnchor,constant: -450),
-            restaurantImage.widthAnchor.constraint(equalTo: view.widthAnchor),
+            restaurantImage.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor),
+            restaurantImage.heightAnchor.constraint(equalTo: view.heightAnchor, constant: -500),
+            restaurantImage.widthAnchor.constraint(equalTo: contentView.widthAnchor),
+            
+            cancelButton.topAnchor.constraint(equalTo: restaurantImage.topAnchor, constant: 10),
+            cancelButton.trailingAnchor.constraint(equalTo: restaurantImage.trailingAnchor, constant: -10),
             
             restaurantName.bottomAnchor.constraint(equalTo: restaurantImage.bottomAnchor, constant: -20),
-            restaurantName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            restaurantName.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             
             restaurantDescription.topAnchor.constraint(equalTo: restaurantImage.bottomAnchor, constant: 15),
-            restaurantDescription.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
-            restaurantDescription.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            restaurantDescription.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            restaurantDescription.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             
             addressLabel.topAnchor.constraint(equalTo: restaurantDescription.bottomAnchor, constant: 20),
-            addressLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            addressLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             
             restaurantAddress.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 10),
-            restaurantAddress.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            restaurantAddress.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
         ])
     }
-}
-
-private extension MKMapView {
-    func centerToLocation(
-        _ location: CLLocation,
-        regionRadius: CLLocationDistance = 1000
-    ) {
-        let coordinateRegion = MKCoordinateRegion(
-            center: location.coordinate,
-            latitudinalMeters: regionRadius,
-            longitudinalMeters: regionRadius
-        )
-        setRegion(coordinateRegion, animated: true)
+    
+    @objc private func cancelButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
 }
