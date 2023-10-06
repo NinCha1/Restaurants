@@ -7,32 +7,42 @@
 
 import UIKit
 
+protocol AddRestaurantDelegate: AnyObject {
+    func didAddRestaurant(restaurant: Restaurant)
+}
 
-final class AddRestaurantViewController: UIViewController {
+
+final class AddRestaurantViewController: UIViewController, UITextViewDelegate {
     
-    private let saveButton = UIButton()
+    private let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
     
-    var delegate: isAbleToReceiveData!
+    private let saveButton = CustomButton()
     
-    var nameLabel = makeHeaderLabel(text: "Name")
-    var typeLabel = makeHeaderLabel(text: "Type")
-    var addressLabel = makeHeaderLabel(text: "Address")
-    var descriptionLabel = makeHeaderLabel(text: "Descripton")
+    weak var delegate: AddRestaurantDelegate?
+    
+    private let nameLabel = makeHeaderLabel(text: "Name")
+    private let typeLabel = makeHeaderLabel(text: "Type")
+    private let addressLabel = makeHeaderLabel(text: "Address")
+    private let descriptionLabel = makeHeaderLabel(text: "Descripton")
+    private let imageLabel = makeHeaderLabel(text: "Image")
     
     lazy var picture = ""
     
-    private let nameTextField = makeTextField(placeholder: "Name")
-    private let typeTextField = makeTextField(placeholder: "Type")
-    private let addressTextField = makeTextField(placeholder: "Address")
-    private let descriptionTextField =  makeTextField(placeholder: "Descripton")
+    private let nameTextField = makeTextField()
+    private let typeTextField = makeTextField()
+    private let addressTextField = makeTextField()
     
-   lazy var restaurant = RestaurantDTO(name: nameTextField.text ?? "", picture: picture, description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? "")
     
-    private let errorLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = .red
-        label.font = Font.headerFont
-        return label
+    private let descriptionTextView: UITextView = {
+        let textView = UITextView()
+        textView.layer.borderColor = UIColor.gray.cgColor
+        textView.layer.borderWidth = 1.0
+        textView.layer.cornerRadius = 5.0
+        textView.autocorrectionType = .no
+        textView.textColor = .black
+        textView.isEditable = true
+        textView.font = .systemFont(ofSize: 16)
+        return textView
     }()
     
     private lazy var stackView: UIStackView = {
@@ -40,7 +50,7 @@ final class AddRestaurantViewController: UIViewController {
         stackView.axis = .vertical
         stackView.spacing = 15
         
-        [nameLabel, nameTextField, typeLabel, typeTextField, addressLabel, addressTextField, descriptionLabel, descriptionTextField].forEach {
+        [nameLabel, nameTextField, typeLabel, typeTextField, addressLabel, addressTextField, descriptionLabel, descriptionTextView, imageLabel].forEach {
             stackView.addArrangedSubview($0)
         }
         return stackView
@@ -54,27 +64,57 @@ final class AddRestaurantViewController: UIViewController {
         return imageView
     }()
     
+    private let scrollView = UIScrollView()
+    
+    private let contentView = UIView()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         setupUI()
-        setupTextFields()
     }
     
     private func setupUI() {
         view.backgroundColor = .white
         navigationItem.title = "Add your restaurant"
         
-        [stackView, errorLabel, imageAdd, saveButton].forEach {
-            view.addSubview($0)
+        self.view.addSubview(scrollView)
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        
+        scrollView.addSubview(contentView)
+        contentView.translatesAutoresizingMaskIntoConstraints = false
+        
+        setupTextFields()
+        descriptionTextView.delegate = self
+        
+        let hConst = contentView.heightAnchor.constraint(equalTo: scrollView.heightAnchor)
+        hConst.isActive = true
+        hConst.priority = UILayoutPriority(50)
+        
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.topAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            
+            contentView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        
+        
+        [stackView, imageAdd, saveButton].forEach {
+            contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let tapGestureRecogniser = UITapGestureRecognizer(target: self, action: #selector(imageViewTapped))
         imageAdd.addGestureRecognizer(tapGestureRecogniser)
         
-        
+        saveButton.isEnabled = false
         saveButton.backgroundColor = .black
         saveButton.setTitle("Save", for: .normal)
         saveButton.setTitleColor(.white, for: .normal)
@@ -82,23 +122,22 @@ final class AddRestaurantViewController: UIViewController {
         saveButton.addTarget(self, action: #selector(saveTapped), for: .touchUpInside)
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            stackView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 10),
+            stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
+            stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
             
-            errorLabel.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: ScreenDimension.defaultInset),
-            errorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
-            imageAdd.topAnchor.constraint(equalTo: errorLabel.bottomAnchor, constant: ScreenDimension.defaultInset),
-            imageAdd.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ScreenDimension.defaultInset),
-            imageAdd.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ScreenDimension.defaultInset),
+            descriptionTextView.heightAnchor.constraint(equalToConstant: 100),
+        
+            imageAdd.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: ScreenDimension.defaultInset),
+            imageAdd.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ScreenDimension.defaultInset),
+            imageAdd.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ScreenDimension.defaultInset),
             imageAdd.heightAnchor.constraint(equalToConstant: 250),
             
-            saveButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20),
-            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            saveButton.topAnchor.constraint(equalTo: imageAdd.bottomAnchor, constant: 30),
+            saveButton.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
             saveButton.heightAnchor.constraint(equalToConstant: 48),
-            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: ScreenDimension.defaultInset),
-            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -ScreenDimension.defaultInset)
+            saveButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: ScreenDimension.defaultInset),
+            saveButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -ScreenDimension.defaultInset)
         ])
     }
     
@@ -116,29 +155,33 @@ final class AddRestaurantViewController: UIViewController {
     
     @objc private func saveTapped() {
         if areTextFieldsValid() {
-            print("saved")
-//            RestaurantDTO.savedRestaurants.append(RestaurantDTO(name: nameTextField.text ?? "", picture: "restaurant1", description: descriptionTextField.text ?? "", type: typeTextField.text ?? "", address: addressTextField.text ?? ""))
-            self.dismiss(animated: true, completion: nil)
+            let restaurant = Restaurant(name: nameTextField.text!, picture: picture, description: descriptionTextView.text!, type: typeTextField.text!, address: addressTextField.text!)
+            delegate?.didAddRestaurant(restaurant: restaurant)
+            
+            navigationController?.popViewController(animated: true)
         } else {
-            errorLabel.text = "Anlaki"
+            saveButton.isEnabled = false
         }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        
-        delegate.pass(restaurant: restaurant)
     }
     
     
     private func setupTextFields() {
         nameTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         addressTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
-        descriptionTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        typeTextField.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+//        descriptionTextView.addTarget(self, action: #selector(textViewDidChange), for: .editingChanged)
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+        if areTextFieldsValid() {
+            saveButton.isEnabled = true
+        } else {
+            saveButton.isEnabled = false
+        }
     }
     
     private func areTextFieldsValid() -> Bool {
-        if nameTextField.text?.isEmpty == true || descriptionTextField.text?.isEmpty == true || addressTextField.text?.isEmpty == true {
+        if nameTextField.text?.isEmpty == true || descriptionTextView.text?.isEmpty == true || addressTextField.text?.isEmpty == true || typeTextField.text?.isEmpty == true {
             return false
         } else {
             return true
@@ -147,9 +190,9 @@ final class AddRestaurantViewController: UIViewController {
     
     @objc private func textFieldDidChange() {
         if areTextFieldsValid() {
-            errorLabel.text = ""
+            saveButton.isEnabled = true
         } else {
-            errorLabel.text = "Anlaki"
+            saveButton.isEnabled = false
         }
     }
     private static func makeHeaderLabel(text: String) -> UILabel {
@@ -161,15 +204,35 @@ final class AddRestaurantViewController: UIViewController {
         return label
     }
     
-    private static func makeTextField(placeholder: String) -> UITextField {
-        let textField = UITextField()
-        textField.placeholder = placeholder
+    private static func makeTextField() -> UITextField {
+        let textField = UITextFieldPadding()
         textField.layer.borderColor = UIColor.gray.cgColor
         textField.layer.borderWidth = 1.0
         textField.layer.cornerRadius = 5.0
+        textField.autocapitalizationType = .none
+        textField.autocorrectionType = .no
         return textField
     }
     
+    //MARK: Saving Image Logic
+    
+    private func saveImageToDocumentDirectory(_ image: UIImage) -> String? {
+        let timestamp = Date().timeIntervalSince1970
+        let fileName = "\(timestamp).png"
+        
+        if let data = image.pngData() {
+            let fileURL = documentsDirectory.appendingPathComponent(fileName)
+            do {
+                try data.write(to: fileURL)
+                return fileName
+            } catch {
+                print("Error saving image: \(error)")
+                return nil
+            }
+        }
+        
+        return nil
+    }
 }
 
 extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavigationControllerDelegate {
@@ -179,13 +242,15 @@ extension AddRestaurantViewController:  UIImagePickerControllerDelegate, UINavig
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        guard let fileUrl = info[UIImagePickerController.InfoKey.imageURL] as? URL else { return }
-        picture = fileUrl.absoluteString
-        print(picture)
         let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage
-        
         imageAdd.image = image
+        
+        if let image = image {
+            if let path = saveImageToDocumentDirectory(image) {
+                picture = path
+            }
+        }
+        
         self.dismiss(animated: true, completion: nil)
     }
-    
 }

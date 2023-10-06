@@ -7,17 +7,9 @@
 
 import UIKit
 
-protocol isAbleToReceiveData {
-    func pass(restaurant: RestaurantDTO)
-}
-
-final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate, isAbleToReceiveData {
+final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate {
     
-    var restaurants: [RestaurantDTO] = [] {
-        didSet {
-            RestaurantDTO.saveToFile(restaurants: restaurants)
-        }
-    }
+    private let viewModel = RestaurantViewModel()
     
     private let tableView: UITableView = {
         let table = UITableView()
@@ -25,22 +17,9 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate, isA
         return table
     }()
     
-    func pass(restaurant: RestaurantDTO) {
-        let newIndexPath = IndexPath(row: restaurants.count, section: 0)
-        restaurants.append(restaurant)
-        tableView.insertRows(at: [newIndexPath], with: .automatic)
-    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if let savedRestaurants = RestaurantDTO.loadFromFile() {
-            restaurants = savedRestaurants
-        }
-//        } else {
-//            restaurants = RestaurantDTO.savedRestaurants
-//        }
         
         setupUI()
     }
@@ -48,13 +27,14 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate, isA
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        tableView.reloadData()
+        self.navigationController?.isNavigationBarHidden = false
     }
     
     private func setupUI() {
         tableView.frame = view.bounds
         view.backgroundColor = .white
         navigationItem.title = "My Restaurants"
+        navigationItem.setHidesBackButton(true, animated: true)
         
         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addTapped))
         
@@ -64,20 +44,25 @@ final class RestaurantViewConrtoller: UIViewController, UITableViewDelegate, isA
         tableView.backgroundColor = .white
         tableView.dataSource = self
         tableView.delegate = self
+        
+        viewModel.loadRestaurants()
+        
         view.addSubview(tableView)
     }
     
     @objc private func addTapped() {
         let addRestaurantVC = AddRestaurantViewController()
         addRestaurantVC.delegate = self
-        self.present(addRestaurantVC, animated: true, completion: nil)
+//        self.present(addRestaurantVC, animated: true, completion: nil)
+        self.navigationController?.pushViewController(addRestaurantVC, animated: true)
+        
     }
 }
 
 extension RestaurantViewConrtoller: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
-            return restaurants.count
+            return viewModel.numberOfRestaurants()
         } else {
             return 0
         }
@@ -88,7 +73,7 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
             fatalError("Table did not dequeue a Cell")
         }
         
-        let restaurant = restaurants[indexPath.row]
+        let restaurant = viewModel.restaurantAtIndex(indexPath.row)
         
         cell.update(with: restaurant)
         cell.showsReorderControl = true
@@ -101,19 +86,28 @@ extension RestaurantViewConrtoller: UITableViewDataSource {
         
         let aboutRestaurantViewController = AboutRestaurantViewController()
     
-        aboutRestaurantViewController.restaurant = restaurants[indexPath.row]
-//        self.navigationController?.pushViewController(aboutRestaurantViewController, animated: false)
-        self.present(aboutRestaurantViewController, animated: true, completion: nil)
+        aboutRestaurantViewController.restaurant = viewModel.restaurantAtIndex(indexPath.row)
+
+//        self.present(aboutRestaurantViewController, animated: true, completion: nil)
+        self.navigationController?.pushViewController(aboutRestaurantViewController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            restaurants.remove(at: indexPath.row)
+            viewModel.deleteRestaurant(indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
         }
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
         return .delete
+    }
+}
+
+extension RestaurantViewConrtoller: AddRestaurantDelegate {
+    func didAddRestaurant(restaurant: Restaurant) {
+        viewModel.addRestaurant(restaurant: restaurant)
+        tableView.reloadData()
+        dismiss(animated: true, completion: nil)
     }
 }

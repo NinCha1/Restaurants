@@ -89,15 +89,29 @@ final class RestaurantTableViewCell: UITableViewCell {
 
     }
     
-    func update(with restaurant: RestaurantDTO) {
-//        let url = URL(string: restaurant.picture)
-        print(restaurant.picture)
-//        let data = try? Data(contentsOf: url!)
-//        restaurantImage.image = UIImage(data: data!)
+    private func loadImageFromDiskWith(fileName: String) -> UIImage? {
+
+      let documentDirectory = FileManager.SearchPathDirectory.documentDirectory
+
+        let userDomainMask = FileManager.SearchPathDomainMask.userDomainMask
+        let paths = NSSearchPathForDirectoriesInDomains(documentDirectory, userDomainMask, true)
+
+        if let dirPath = paths.first {
+            let imageUrl = URL(fileURLWithPath: dirPath).appendingPathComponent(fileName)
+            let image = UIImage(contentsOfFile: imageUrl.path)
+            return image
+
+        }
+
+        return nil
+    }
+    
+    func update(with restaurant: Restaurant) {
         
         restaurantType.text = restaurant.type
         restaurantName.text = restaurant.name
         restaurantAddress.text = restaurant.address
+        restaurantImage.image = loadImageFromDiskWith(fileName: restaurant.picture)
     }
 
 }
